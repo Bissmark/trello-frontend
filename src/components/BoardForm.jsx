@@ -12,7 +12,7 @@ const BoardForm = ({ client, isOpen, onClose, user }) => {
                 user: user._id,
             }
 
-            const response = await fetch(`${import.meta.inv.VITE_EXPRESS_BACKEND_URL}/boards`, {
+            const response = await fetch(`${import.meta.env.VITE_EXPRESS_BACKEND_URL}/boards`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,

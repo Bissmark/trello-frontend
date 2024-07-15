@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import BoardDetails from "./BoardDetails";
 
 const Profile = ({user}) => {
 
