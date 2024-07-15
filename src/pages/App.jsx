@@ -23,7 +23,7 @@ const App = () => {
     };
 
     return (
-        <div>
+        <div className='body-font font-cagliostro text-white'>
             <QueryClientProvider client={queryClient}>
                 { user ?
                     <>

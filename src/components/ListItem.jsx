@@ -3,6 +3,7 @@ import { GrAdd } from 'react-icons/gr';
 import CardForm from './CardForm';
 import CardDetail from './CardDetail';
 import { useQuery, useMutation } from '@tanstack/react-query';
+import DeleteModal from './DeleteModal';
 
 const PriorityLevels = {
   High: "High",
@@ -13,7 +14,7 @@ const PriorityLevels = {
 const ListItem = ({ list, client }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isCardModalOpen, setIsCardModalOpen] = useState(false);
-    //const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
 
     const deleteList = useMutation({
@@ -58,22 +59,27 @@ const ListItem = ({ list, client }) => {
 
 
     return (
-        <div>
-            <div className='flex flex-row bg-blue-400 rounded py-1 px-2.5'>
+        <div className='flex flex-col w-60 bg-gray-800 m-4 rounded-xl p-2'>
+            <div className='flex flex-row justify-between py-1 px-2.5 mb-4'>
                 <h3 className='mr-3'>{list.title}</h3>
-                <button onClick={_handleDelete}>X</button>
+                <button onClick={() => {setDeleteModalOpen(true)}}>
+                    X
+                </button>
+                <DeleteModal isOpen={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} onDelete={_handleDelete} />
             </div>
             <div className='flex flex-col'>
                 {list.cards.map(card => (
-                    <div key={card._id}>
+                    <div className='w-full bg-gray-600 rounded-lg p-2 mb-2' key={card._id}>
                         <button style={{ backgroundColor: getPriorityColour(card.priority)}} onClick={() => handleCardClick(card)}>{card.title}</button>
                     </div>
                 ))}
             </div>
             <div>
                 <button onClick={() => setIsModalOpen(true)}>
-                    <span><GrAdd /></span>
-                    Add Card
+                    <div className='flex flex-row items-center'>
+                        <GrAdd className='ml-2 mr-2' />
+                        Add Card
+                    </div>
                 </button>
                 <CardForm list={list} priorityLevels={PriorityLevels} isOpen={isModalOpen} client={client} onClose={() => setIsModalOpen(false)} />
             </div>

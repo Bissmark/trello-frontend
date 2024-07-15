@@ -46,7 +46,7 @@ const CardForm = ({ list, isOpen, onClose, client, priorityLevels}) => {
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full" id="default-modal">
-            <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-gray-800 text-gray-500">
                 <form onSubmit={_handleSubmit}>
                     <div className="name-field-tasks flex items-center gap-2">
                         <MdDriveFileRenameOutline />
@@ -54,7 +54,7 @@ const CardForm = ({ list, isOpen, onClose, client, priorityLevels}) => {
                             type="text"
                             placeholder="Enter a title for this card..."
                             required
-                            className="input input-bordered w-full"
+                            className="w-full p-3 rounded-md"
                             onChange={(e) => setCard({ ...card, title: e.target.value })}
                         />
                     </div>
@@ -63,13 +63,14 @@ const CardForm = ({ list, isOpen, onClose, client, priorityLevels}) => {
                         <textarea
                             placeholder="Enter a description for this card..."
                             required
-                            className="textarea textarea-bordered w-full"
+                            className="w-full p-3 rounded-md"
                             onChange={(e) => setCard({ ...card, description: e.target.value })}
                         />
                     </div>
                     <div>
                         <select 
                             name="priority"
+                            className="p-3 rounded-md ml-6 w-80 mb-3 text-black"
                             onChange={(e) => setCard({ ...card, priority: e.target.value })}
                         >
                             {Object.values(priorityLevels).map((level, index) => (
@@ -85,8 +86,8 @@ const CardForm = ({ list, isOpen, onClose, client, priorityLevels}) => {
                         </label>
                     </div> */}
                     <div className="flex justify-end gap-2">
-                        <button type="button" onClick={onClose} className="btn">Cancel</button>
-                        <button type="submit" className="btn btn-primary">Add Card</button>
+                        <button type="button" className="text-white bg-gray-500 p-2 rounded-md mr-2" onClick={onClose}>Cancel</button>
+                        <button type="submit" className="text-white bg-gray-500 p-2 rounded-md">Add Card</button>
                     </div>
                 </form>
             </div>

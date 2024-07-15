@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
+import { FaPlus } from "react-icons/fa";
 import ListItem from '../components/ListItem';
 
 const BoardDetails = ({ client }) => {
@@ -62,9 +63,15 @@ const BoardDetails = ({ client }) => {
     if (isFetching) return <p>Loading...</p>
     if (error) return <p>Error: {error.message}</p>
 
+    const capitalizeFirstLetter = (string) => {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
     return (
-        <div>
-            <h1>Board {board.name}</h1>
+        <div className='flex flex-col'>
+            <div className='bg-blue-800 '>
+                <h1 className='p-3 font-bold text-3xl'>{capitalizeFirstLetter(board.name)}</h1>
+            </div>
 
             <div className='flex flex-row'>
                 <div className='flex flex-row flex-start'>
@@ -74,19 +81,31 @@ const BoardDetails = ({ client }) => {
                         </div>
                     ))}
                 </div>
-            <div>
+            <div className='m-4'>
                 {!addingList ? (
-                    <button onClick={() => setAddingList(true)}>Add List</button>
+                    <button 
+                        className='bg-gray-100 p-2 w-48 text-left text-black rounded-lg hover:bg-gray-200' 
+                        onClick={() => setAddingList(true)}
+                    >
+                        <div className='flex flex-row items-center'>
+                            <FaPlus className='mr-2' />
+                            Add List
+                        </div>
+                    </button>
                 ) : (
-                    <form onSubmit={_handleSubmit}>
+                    <form className='flex flex-col bg-gray-800 p-2 rounded-xl' onSubmit={_handleSubmit}>
                         <input 
                             type="text"
-                            placeholder='Enter a title for this list...'
+                            className='p-2 rounded-lg mb-2 border border-gray-300 text-gray-500 bg-gray-700 hover:bg-gray-600'
+                            placeholder='Enter list title...'
+                            autoFocus
                             value={listName} 
                             onChange={(e) => setListName(e.target.value)} 
                         />
-                        <button type="submit">Add</button>
-                        <button onClick={() => setAddingList(false)}>Cancel</button>
+                        <div className='flex'>
+                            <button className='bg-blue-300 rounded-lg p-2 mr-3' type="submit">Add list</button>
+                            <button onClick={() => setAddingList(false)}>X</button>
+                        </div>
                     </form>
                 )}
             </div>
