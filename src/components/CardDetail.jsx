@@ -28,7 +28,7 @@ const CardDetail = ({ card, onClose, isOpen, priorityLevels, client }) => {
 
     const editMyCard = useMutation({
         mutationFn: async () => {
-            const response = await fetch(`http://localhost:3001/cards/${card._id}`, {
+            const response = await fetch(`${import.meta.inv.VITE_EXPRESS_BACKEND_URL}/cards/${card._id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

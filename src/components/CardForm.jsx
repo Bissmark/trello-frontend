@@ -17,7 +17,7 @@ const CardForm = ({ list, isOpen, onClose, client, priorityLevels}) => {
 
     const mutation = useMutation({
         mutationFn: async (formData) => {
-            const response = await fetch('http://localhost:3001/cards', {
+            const response = await fetch(`${import.meta.inv.VITE_EXPRESS_BACKEND_URL}/cards`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

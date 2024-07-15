@@ -13,7 +13,7 @@ const BoardDetails = ({ client }) => {
     const { isFetching, error, data: board } = useQuery({
         queryKey: ['board', id],
         queryFn: async () => {
-            const response = await fetch(`http://localhost:3001/boards/${id}`, {
+            const response = await fetch(`${import.meta.env.VITE_EXPRESS_BACKEND_URL}/boards/${id}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 }
@@ -30,7 +30,7 @@ const BoardDetails = ({ client }) => {
                 board: id,
             }
 
-            const response = await fetch('http://localhost:3001/lists', {
+            const response = await fetch(`${import.meta.env.VITE_EXPRESS_BACKEND_URL}/lists`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
