@@ -18,7 +18,7 @@ const ListItem = ({ list, client }) => {
 
     const deleteList = useMutation({
         mutationFn: async () => {
-            const response = await fetch(`${import.meta.inv.VITE_EXPRESS_BACKEND_URL}/lists/${list._id}`, {
+            const response = await fetch(`${import.meta.env.VITE_EXPRESS_BACKEND_URL}/lists/${list._id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

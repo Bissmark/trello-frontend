@@ -7,7 +7,7 @@ const Profile = ({user}) => {
     const { isFetching, error, data: boards } = useQuery({
         queryKey: ['boards', user._id],
         queryFn: async () => {
-            const response = await fetch(`${import.meta.inv.VITE_EXPRESS_BACKEND_URL}/boards`, {
+            const response = await fetch(`${import.meta.env.VITE_EXPRESS_BACKEND_URL}/boards`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 }
