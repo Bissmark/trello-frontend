@@ -26,8 +26,8 @@ const SignUpForm = ({ setUser, showSignup, setShowSignup }) => {
         try {
             const user = await authService.signup(userData);
             setUser(user);
-        } catch {
-            setError('Sign Up Failed - Try Again');
+        } catch (error) {
+            setError(error.message);
         }
     }
 
@@ -36,18 +36,18 @@ const SignUpForm = ({ setUser, showSignup, setShowSignup }) => {
     return (
         <IconContext.Provider value={{ color: "white", size: "2.5em" }}>
             <div className='flex justify-center items-center h-screen'>
-                <div className='w-fit bg-gray-500 p-5 rounded-lg shadow text-center'>
-                    <h1 className='my-4 text-5xl font-extrabold dark:text-white'>{showSignup ? 'Sign Up Page' : 'Log In Page'}</h1>
-                    <form autoComplete="off" onSubmit={handleSubmit}>
-                        <div className='flex border mx-auto w-48 rounded-lg mb-6'>
+                <div className='bg-gray-500 p-5 rounded-lg shadow-2xl text-center'>
+                    <h1 className='my-4 text-5xl font-extrabold'>Sign Up Page</h1>
+                    <form className='mt-6' autoComplete="off" onSubmit={handleSubmit}>
+                        <div className='flex border mx-auto w-48 rounded-lg mb-4'>
                             <CgRename />
                             <input className='text-black p-2 w-40 rounded-e-lg' type="text" name="name" value={userData.name} onChange={handleChange} required placeholder='Username' />
                         </div>
-                        <div className='flex border mx-auto w-48 rounded-lg mb-6'>
+                        <div className='flex border mx-auto w-48 rounded-lg mb-4'>
                             <AiOutlineMail />
                             <input className='text-black p-2 w-40 rounded-e-lg' type="email" name="email" value={userData.email} onChange={handleChange} required placeholder='Email' />
                         </div>
-                        <div className='flex border mx-auto w-48 rounded-lg mb-6'>
+                        <div className='flex border mx-auto w-48 rounded-lg mb-4'>
                             <RiLockPasswordLine />
                             <input className='text-black p-2 w-40 rounded-e-lg' type="password" name="password" value={userData.password} onChange={handleChange} required placeholder='Password' />
                         </div>
@@ -55,11 +55,11 @@ const SignUpForm = ({ setUser, showSignup, setShowSignup }) => {
                             <RiLockPasswordFill />
                             <input className='text-black p-2 w-40 rounded-e-lg' type="password" name="confirm" value={userData.confirm} onChange={handleChange} required placeholder='Password Confirm' />
                         </div>
-                        <button className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800' type="submit" disabled={disable}>SIGN UP</button>
+                        <button className='text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 mb-2' type="submit" disabled={disable}>SIGN UP</button>
                     </form>
-                    <p>Already have an account and want to login, click <Link onClick={() => setShowSignup(!showSignup)} className='hover:text-blue-500'>here</Link></p>
+                    <p>Already have an account and want to login, click <Link onClick={() => setShowSignup(!showSignup)} className='text-blue-400 hover:text-white underline'>here</Link></p>
+                    <p className='text-red-500 mt-4'>{error}</p>
                 </div>
-                <p className="error-message">{error}</p>
             </div>
         </IconContext.Provider>
     );

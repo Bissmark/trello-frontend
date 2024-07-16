@@ -19,7 +19,7 @@ const Profile = ({user}) => {
     if (error) return <p>Error: {error.message}</p>
 
     return (
-        <div className="flex justify-center mx-auto">
+        <div className="flex justify-center mx-auto text-black">
             <div className="flex-col">
                 <h1 className="mt-4 text-4xl front-bold">Profile</h1>
                 <div>

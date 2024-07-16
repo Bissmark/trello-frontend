@@ -4,7 +4,7 @@ const DeleteModal = ({ isOpen, onClose, onDelete }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full" id="default-modal">
+        <div className="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full text-black" id="default-modal">
             <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
                 <div className="name-field-tasks flex items-center gap-2">
                     <div className="modal-header">
