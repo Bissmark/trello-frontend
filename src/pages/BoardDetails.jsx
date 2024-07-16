@@ -73,8 +73,8 @@ const BoardDetails = ({ client }) => {
                 <h1 className='p-3 font-bold text-3xl'>{capitalizeFirstLetter(board.name)}</h1>
             </div>
 
-            <div className='flex flex-row'>
-                <div className='flex flex-row flex-start'>
+            <div className='flex flex-col md:flex-row items-center md:items-start'>
+                <div className='flex flex-col md:flex-row flex-start'>
                     { board.lists?.map(list => (
                         <div key={list._id}>
                             <ListItem list={list} onAddCard={addCardToList} client={client} />

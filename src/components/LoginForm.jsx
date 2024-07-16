@@ -59,7 +59,7 @@ export default function LoginForm({ setUser, showSignup, setShowSignup, setProfi
             <div className='flex justify-center items-center h-screen'>
                 <div className='bg-gray-500 p-5 rounded-lg shadow-2xl text-center'>
                     <h1 className='my-4 text-5xl font-extrabold mb-4'>Login Page</h1>
-                        <button className='bg-white px-4 py-2.5 w-48 rounded-md text-black hover:bg-gray-200 mb-5' onClick={login}>Sign in with Google</button>
+                    <button className='bg-white px-4 py-2.5 w-48 rounded-md text-black hover:bg-gray-200 mb-5' onClick={login}>Sign in with Google</button>
                     <form onSubmit={handleSubmit}>
                         <div className='flex border mx-auto w-48 rounded-lg mb-4'>
                             <AiOutlineMail />

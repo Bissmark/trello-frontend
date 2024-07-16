@@ -62,7 +62,7 @@ const Home = ({ client, user }) => {
     // if (error) return <p>Error: {error.message}</p>
 
     return (
-        <div className='flex flex-row'>
+        <div>
             <h1>Home</h1>
             {/* <div className='flex flex-row flex-start'>
                 {lists?.map((list, index) => (
