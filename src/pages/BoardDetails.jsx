@@ -104,7 +104,7 @@ const BoardDetails = ({ client }) => {
                             onChange={(e) => setListName(e.target.value)} 
                         />
                         <div className='flex'>
-                            <button className='bg-blue-300 rounded-lg p-2 mr-3' disabled={disable} type="submit">Add list</button>
+                            <button className='bg-blue-500 rounded-lg p-2 mr-3' disabled={disable} type="submit">Add list</button>
                             <button onClick={() => setAddingList(false)}>X</button>
                         </div>
                     </form>

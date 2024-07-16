@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MdDriveFileRenameOutline, MdOutlineDescription } from "react-icons/md";
+import { MdDriveFileRenameOutline, MdOutlineDescription, MdPriorityHigh } from "react-icons/md";
 import { GoImage } from "react-icons/go";
 import { useQuery, useMutation } from '@tanstack/react-query';
 
@@ -48,8 +48,8 @@ const CardForm = ({ list, isOpen, onClose, client, priorityLevels}) => {
         <div className="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full" id="default-modal">
             <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-gray-800 text-gray-500">
                 <form onSubmit={_handleSubmit}>
-                    <div className="flex items-center gap-2">
-                        <MdDriveFileRenameOutline />
+                    <div className="flex gap-2">
+                        <MdDriveFileRenameOutline className="text-blue-500 mt-2" size={30} />
                         <input
                             type="text"
                             className="w-full p-3 rounded-md"
@@ -58,8 +58,8 @@ const CardForm = ({ list, isOpen, onClose, client, priorityLevels}) => {
                             onChange={(e) => setCard({ ...card, title: e.target.value })}
                         />
                     </div>
-                    <div className="flex items-center gap-2 my-4">
-                        <MdOutlineDescription />
+                    <div className="flex gap-2 my-4">
+                        <MdOutlineDescription className="text-blue-500 mt-4" size={30} />
                         <textarea
                             placeholder="Enter a description for this card..."
                             required
@@ -67,10 +67,11 @@ const CardForm = ({ list, isOpen, onClose, client, priorityLevels}) => {
                             onChange={(e) => setCard({ ...card, description: e.target.value })}
                         />
                     </div>
-                    <div>
+                    <div className="flex gap-2">
+                        <MdPriorityHigh className="text-blue-500 mt-2" size={30} />
                         <select 
                             name="priority"
-                            className="p-3 rounded-md ml-6 w-80 mb-3 text-black"
+                            className="p-3 rounded-md w-full mb-3 text-black"
                             onChange={(e) => setCard({ ...card, priority: e.target.value })}
                         >
                             {Object.values(priorityLevels).map((level, index) => (

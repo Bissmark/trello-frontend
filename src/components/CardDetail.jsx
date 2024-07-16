@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query"
+import { MdDriveFileRenameOutline, MdOutlineDescription, MdPriorityHigh } from "react-icons/md";
 
 const CardDetail = ({ card, onClose, isOpen, priorityLevels, client }) => {
     const [isEditing, setIsEditing] = useState(false);
@@ -53,31 +54,34 @@ const CardDetail = ({ card, onClose, isOpen, priorityLevels, client }) => {
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full" id="default-modal">
-            <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-gray-800 text-gray-500">
                 {isEditing ? (
                     <div>
-                        <div>
-                            <label>Title:</label>
+                        <div className="flex gap-2">
+                            <MdDriveFileRenameOutline className="text-blue-500 mt-1" size={30} />
                             <input 
                                 type="text"
+                                className="w-full p-2 rounded-md mb-3"
                                 name="title"
                                 value={editCard.title}
                                 onChange={_handleChange}
                             />
                         </div>
-                        <div>
-                            <label>Description:</label>
+                        <div className="flex gap-2">
+                            <MdOutlineDescription className="text-blue-500 mt-1" size={30} />
                             <input 
                                 type="text"
+                                className="w-full p-2 rounded-md mb-3"
                                 name="description"
                                 value={editCard.description}
                                 onChange={_handleChange}
                             />
                         </div>
-                        <div>
-                            <label>Priority:</label>
+                        <div className="flex gap-2">
+                            <MdPriorityHigh className="text-blue-500 mt-1" size={30} />
                             <select 
                                 name="priority"
+                                className="w-full p-2 rounded-md mb-3"
                                 value={editCard.priority}
                                 onChange={_handleChange}
                             >
@@ -89,18 +93,33 @@ const CardDetail = ({ card, onClose, isOpen, priorityLevels, client }) => {
                     </div>
                 ) : (
                     <div>
-                        <h4>Title: {card.title}</h4>
-                        <p>Description: {card.description}</p>
-                        <p>Priority: {card.priority}</p>
+                        <div className="flex items-center gap-2 mb-2">
+                            <MdDriveFileRenameOutline className="text-blue-500" size={30} />
+                            <div className="text-base text-white">
+                                {card.title}
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-2 mb-2">
+                            <MdOutlineDescription className="text-blue-500" size={30} />
+                            <div className="text-base text-white">
+                                {card.description}
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-2 mb-2">
+                            <MdPriorityHigh className="text-blue-500" size={30} />
+                            <div className="text-base text-white">
+                                {card.priority}
+                            </div>
+                        </div>
                     </div>
                 )}
                 <div className="flex justify-end gap-2">
+                    <button className="text-white bg-gray-500 p-2 rounded-md mr-2 w-20" onClick={onClose}>Cancel</button>
                     {isEditing ? (
-                        <button onClick={_handleUpdate}>Update</button>
+                        <button className="text-white bg-gray-500 p-2 rounded-md w-20" onClick={_handleUpdate}>Update</button>
                     ) : (
-                        <button onClick={() => setIsEditing(true)}>Edit</button>
+                        <button className="text-white bg-gray-500 p-2 rounded-md w-20" onClick={() => setIsEditing(true)}>Edit</button>
                     )}
-                    <button onClick={onClose}>Close</button>
                 </div>
             </div>
         </div>

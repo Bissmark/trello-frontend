@@ -1,15 +1,35 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
+import { CgProfile } from "react-icons/cg";
 import BoardForm from './BoardForm';
 
 const Navbar = ({ client, user,  profile, logOut }) => {
     const [isModalOpen, setModalOpen] = useState(false);
     const [openNav, setOpenNav] = useState(false);
+    const [openProfile, setOpenProfile] = useState(false);
+    const dropdownRef = useRef(null);
+
+    useEffect(() => {
+        const pageClickEvent = (e) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+                setOpenProfile(false);
+            }
+        };
+
+        document.addEventListener('click', pageClickEvent);
+        return () => {
+            document.removeEventListener('click', pageClickEvent);
+        }
+    }, []);
 
     const handleDropDown = () => {
         setOpenNav(!openNav);
     };
+
+    const _handleProfileDropdown = () => {
+        setOpenProfile(!openProfile);
+    }
 
     return (
         <nav className='bg-slate-900'>
@@ -22,17 +42,22 @@ const Navbar = ({ client, user,  profile, logOut }) => {
                     <ul className='flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:border-0 text-white'>
                         { user ? (
                             <div className='md:flex md:flex-row md:items-center'>
-                                <li className='mr-5'><Link to="/">Home</Link></li>
-                                <li className='mr-5'><Link to="/about">About</Link></li>
-                                <li className='mr-5'>
-                                    <button onClick={() => setModalOpen(true)}>
-                                        Create Board
-                                    </button>
-                                    <BoardForm user={user} client={client} isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
-                                </li>
-                                <li className='mr-5'><button onClick={logOut}>Log Out</button></li>
-                                <div className='relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full'>
-                                    <Link to='/profile'><svg className="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"></path></svg></Link>
+                                <li className='mr-5 hover:underline hover:text-cyan-300'><Link to="/">Home</Link></li>
+                                <li className='mr-5 hover:underline hover:text-cyan-300'><Link to="/about">About</Link></li>
+                                <div className='relative' ref={dropdownRef}>
+                                    <CgProfile className='text-blue-500 hover:text-white cursor-pointer' size={30} onClick={_handleProfileDropdown} />
+                                    {openProfile && (
+                                        <div className='absolute right-0 p-3 mt-2 w-48 bg-gray-800 rounded-lg shadow-2xl border border-gray-200'>
+                                            <Link className='hover:text-blue-500' to='/profile'>Profile</Link>
+                                            <li className=' hover:text-blue-500'>
+                                                <button onClick={() => setModalOpen(true)}>
+                                                    Create Board
+                                                </button>
+                                                <BoardForm user={user} client={client} isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+                                            </li>
+                                            <li className='hover:text-blue-500'><button onClick={logOut}>Log Out</button></li>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         ) : (

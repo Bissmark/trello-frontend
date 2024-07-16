@@ -1,5 +1,4 @@
 const DeleteModal = ({ isOpen, onClose, onDelete, boardId }) => {
-
     const _handleDelete = () => onDelete(boardId);
 
     if (!isOpen) return null;
