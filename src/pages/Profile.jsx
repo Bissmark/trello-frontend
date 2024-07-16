@@ -28,7 +28,7 @@ const Profile = ({user, client}) => {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
-                body: JSON.stringify({ boardId: boardId })
+                body: JSON.stringify({ boardId })
             });
             if (!response.ok) throw new Error('Bad Request');
             return response.json();

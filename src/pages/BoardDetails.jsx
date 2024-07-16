@@ -57,7 +57,6 @@ const BoardDetails = ({ client }) => {
 
     const addCardToList = (newCard) => {
         setCards([...cards, newCard]);
-        console.log(cards);
     }
 
     if (isFetching) return <p>Loading...</p>
@@ -66,6 +65,8 @@ const BoardDetails = ({ client }) => {
     const capitalizeFirstLetter = (string) => {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
+    
+    const disable = listName.trim() === '';
 
     return (
         <div className='flex flex-col'>
@@ -103,7 +104,7 @@ const BoardDetails = ({ client }) => {
                             onChange={(e) => setListName(e.target.value)} 
                         />
                         <div className='flex'>
-                            <button className='bg-blue-300 rounded-lg p-2 mr-3' type="submit">Add list</button>
+                            <button className='bg-blue-300 rounded-lg p-2 mr-3' disabled={disable} type="submit">Add list</button>
                             <button onClick={() => setAddingList(false)}>X</button>
                         </div>
                     </form>
