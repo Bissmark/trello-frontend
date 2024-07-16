@@ -67,7 +67,7 @@ const ListItem = ({ list, client }) => {
                 </button>
                 <DeleteModal isOpen={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} onDelete={_handleDelete} />
             </div>
-            <div className='flex flex-row'>
+            <div className='flex flex-row md:flex-col'>
                 {list.cards.map(card => (
                     <div className='w-full bg-gray-600 rounded-lg p-2 mb-2' key={card._id}>
                         <button style={{ backgroundColor: getPriorityColour(card.priority)}} onClick={() => handleCardClick(card)}>{card.title}</button>
