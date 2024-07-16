@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { GrAdd } from 'react-icons/gr';
 import CardForm from './CardForm';
 import CardDetail from './CardDetail';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import DeleteModal from './DeleteModal';
 
 const PriorityLevels = {
@@ -62,7 +62,7 @@ const ListItem = ({ list, client }) => {
         <div className='flex flex-col w-60 bg-gray-800 m-4 rounded-xl p-2'>
             <div className='flex flex-row justify-between py-1 px-2.5 mb-4'>
                 <h3 className='mr-3'>{list.title}</h3>
-                <button onClick={() => {setDeleteModalOpen(true)}}>
+                <button onClick={() => setDeleteModalOpen(true)}>
                     X
                 </button>
                 <DeleteModal isOpen={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} onDelete={_handleDelete} />

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 
 const CardDetail = ({ card, onClose, isOpen, priorityLevels, client }) => {
     const [isEditing, setIsEditing] = useState(false);

@@ -32,7 +32,7 @@ const Navbar = ({ client, user,  profile, logOut }) => {
                                 </li>
                                 <li className='mr-5'><button onClick={logOut}>Log Out</button></li>
                                 <div className='relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full'>
-                                    <Link to='/profile'><svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg></Link>
+                                    <Link to='/profile'><svg className="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"></path></svg></Link>
                                 </div>
                             </div>
                         ) : (

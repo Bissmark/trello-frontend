@@ -31,7 +31,7 @@ const App = () => {
                         <Routes>
                             <Route path="/" element={<Home />} />
                             <Route path="*" element={<Navigate to="/" />} />
-                            <Route path='/profile' element={<Profile user={user} />} />
+                            <Route path='/profile' element={<Profile user={user} client={queryClient} />} />
                             <Route path='/boards/:id' element={<BoardDetails client={queryClient} />} />
                         </Routes>
                     </>
