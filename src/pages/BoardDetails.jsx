@@ -60,19 +60,33 @@ const BoardDetails = ({ client }) => {
         setCards([...cards, newCard]);
     }
 
+    const reorder = (list, startIndex, endIndex) => {
+        const result = Array.from(list);
+        const [removed] = result.splice(startIndex, 1);
+        result.splice(endIndex, 0, removed);
+
+        return result;
+    };
+
     const onDragEnd = (result) => {
         const { destination, source } = result;
+        //console.log(result);
         if (!destination) {
             return;
         }
-        if (
-            destination.droppableId === source.droppableId &&
-            destination.index === source.index
-        ) {
+        if (destination.droppableId === source.droppableId && destination.index === source.index) {
             return;
         }
-        // Implement moving logic here
-        // For example, reorder the lists array and update the state
+
+        // const items = reorder(board.lists, source.index, destination.index);
+        // client.mutate(['board', id], items);
+
+        const newResult = Array.from(board.lists);
+        const [removed] = newResult.splice(source.index, 1);
+        newResult.splice(destination.index, 0, removed);
+        console.log(newResult);
+
+        board.lists = newResult;
     };
     
     const capitalizeFirstLetter = (string) => {
@@ -85,38 +99,37 @@ const BoardDetails = ({ client }) => {
     if (error) return <p>Error: {error.message}</p>
 
     return (
-        <DragDropContext onDragEnd={onDragEnd}>
         <div className='flex flex-col'>
             <div className='bg-blue-800 '>
                 <h1 className='p-3 font-bold text-3xl'>{capitalizeFirstLetter(board.name)}</h1>
             </div>
-
-            <Droppable droppableId='board' direction="horizontal">
-                {(provided) => (
-            <div className='flex flex-col md:flex-row items-center md:items-start'
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-            >
-                <div className='flex flex-col md:flex-row flex-start'>
-                    { board.lists?.map((list, index) => (
-                        <Draggable key={list._id} draggableId={list._id} index={index}>
-                            {(provided) => (
-                                <div
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                >
-                                    <ListItem list={list} onAddCard={addCardToList} client={client} />
-                                </div>
-                            )}
-                        </Draggable>
-                    ))}
-                    {provided.placeholder}
-                </div>
-            </div>
-
+            <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId='board' direction="horizontal">
+                {(provided, snapshot) => (
+                    <div className='flex flex-col md:flex-row items-center md:items-start'
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                    >
+                        <div className='flex flex-col md:flex-row flex-start'>
+                            { board.lists.map((list, index) => (
+                                <Draggable key={list._id} draggableId={list._id} index={index}>
+                                    {(provided, snapshot) => (
+                                        <div
+                                            ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            {...provided.dragHandleProps}
+                                        >
+                                            <ListItem list={list} onAddCard={addCardToList} client={client} />
+                                        </div>
+                                    )}
+                                </Draggable>
+                            ))}
+                            {provided.placeholder}
+                        </div>
+                    </div>
                 )}
-            </Droppable>
+                </Droppable>
+            </DragDropContext>
             <div className='m-4'>
                 {!addingList ? (
                     <button 
@@ -146,7 +159,6 @@ const BoardDetails = ({ client }) => {
                 )}
             </div>
         </div>
-        </DragDropContext>
     )
 }
 
