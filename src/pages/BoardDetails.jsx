@@ -60,13 +60,21 @@ const BoardDetails = ({ client }) => {
         setCards([...cards, newCard]);
     }
 
-    const reorder = (list, startIndex, endIndex) => {
-        const result = Array.from(list);
-        const [removed] = result.splice(startIndex, 1);
-        result.splice(endIndex, 0, removed);
-
-        return result;
-    };
+    const saveArrayPositions = useMutation({
+        mutationFn: async (newLists) => {
+            const response = await fetch(`${import.meta.env.VITE_EXPRESS_BACKEND_URL}/boards/${id}`, {
+                method: 'PUT',
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ lists: newLists })
+            });
+            console.log(newLists);
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+        }
+    })
 
     const onDragEnd = (result) => {
         const { destination, source } = result;
@@ -78,15 +86,12 @@ const BoardDetails = ({ client }) => {
             return;
         }
 
-        // const items = reorder(board.lists, source.index, destination.index);
-        // client.mutate(['board', id], items);
-
         const newResult = Array.from(board.lists);
         const [removed] = newResult.splice(source.index, 1);
         newResult.splice(destination.index, 0, removed);
-        console.log(newResult);
 
         board.lists = newResult;
+        saveArrayPositions.mutateAsync(newResult);
     };
     
     const capitalizeFirstLetter = (string) => {
