@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { FaPlus } from "react-icons/fa";
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import ListItem from '../components/ListItem';
 
 const BoardDetails = ({ client }) => {
@@ -59,29 +60,63 @@ const BoardDetails = ({ client }) => {
         setCards([...cards, newCard]);
     }
 
-    if (isFetching) return <p>Loading...</p>
-    if (error) return <p>Error: {error.message}</p>
-
+    const onDragEnd = (result) => {
+        const { destination, source } = result;
+        if (!destination) {
+            return;
+        }
+        if (
+            destination.droppableId === source.droppableId &&
+            destination.index === source.index
+        ) {
+            return;
+        }
+        // Implement moving logic here
+        // For example, reorder the lists array and update the state
+    };
+    
     const capitalizeFirstLetter = (string) => {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
     
     const disable = listName.trim() === '';
 
+    if (isFetching) return <p>Loading...</p>
+    if (error) return <p>Error: {error.message}</p>
+
     return (
+        <DragDropContext onDragEnd={onDragEnd}>
         <div className='flex flex-col'>
             <div className='bg-blue-800 '>
                 <h1 className='p-3 font-bold text-3xl'>{capitalizeFirstLetter(board.name)}</h1>
             </div>
 
-            <div className='flex flex-col md:flex-row items-center md:items-start'>
+            <Droppable droppableId='board' direction="horizontal">
+                {(provided) => (
+            <div className='flex flex-col md:flex-row items-center md:items-start'
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+            >
                 <div className='flex flex-col md:flex-row flex-start'>
-                    { board.lists?.map(list => (
-                        <div key={list._id}>
-                            <ListItem list={list} onAddCard={addCardToList} client={client} />
-                        </div>
+                    { board.lists?.map((list, index) => (
+                        <Draggable key={list._id} draggableId={list._id} index={index}>
+                            {(provided) => (
+                                <div
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                >
+                                    <ListItem list={list} onAddCard={addCardToList} client={client} />
+                                </div>
+                            )}
+                        </Draggable>
                     ))}
+                    {provided.placeholder}
                 </div>
+            </div>
+
+                )}
+            </Droppable>
             <div className='m-4'>
                 {!addingList ? (
                     <button 
@@ -110,8 +145,8 @@ const BoardDetails = ({ client }) => {
                     </form>
                 )}
             </div>
-            </div>
         </div>
+        </DragDropContext>
     )
 }
 
