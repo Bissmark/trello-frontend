@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import DeleteModal from "../components/DeleteModal";
+import BoardForm from '../components/BoardForm';
 
 const Profile = ({user, client}) => {
     const [deleteModalOpen, setDeleteModalOpen] = useState({ isOpen: false, boardId: null });
+    const [modalOpen, setModalOpen] = useState(false);
 
     const { isFetching, error, data: boards } = useQuery({
         queryKey: ['boards', user._id],
@@ -64,19 +66,28 @@ const Profile = ({user, client}) => {
                     {user.name && <p>Name: {user.name }</p>}
 
                     <h2>Your boards:</h2>
-                    <div className="flex flex-row">
-                        {boards?.map(board => (
-                            <div className="bg-amber-400 w-48 h-32 flex justify-between items-start p-2 rounded-md mr-4" key={board._id}>
-                                <Link to={`/boards/${board._id}`}>
-                                    <p className="text-white">{board.name}</p>
-                                </Link>
-                                <button onClick={() => openDeleteModal(board._id)}>
-                                    X
-                                </button>
-                                <DeleteModal isOpen={deleteModalOpen.isOpen} onClose={closeDeleteModal} onDelete={_handleDelete} boardId={board._id} />
-                            </div>
-                        ))}
-                    </div>
+                    {boards && boards.length > 0 ? (
+                        <div className="flex flex-row">
+                            {boards?.map(board => (
+                                <div className="bg-amber-400 w-48 h-32 flex justify-between items-start p-2 rounded-md mr-4" key={board._id}>
+                                    <Link to={`/boards/${board._id}`}>
+                                        <p className="text-white">{board.name}</p>
+                                    </Link>
+                                    <button onClick={() => openDeleteModal(board._id)}>
+                                        X
+                                    </button>
+                                    <DeleteModal isOpen={deleteModalOpen.isOpen} onClose={closeDeleteModal} onDelete={_handleDelete} boardId={board._id} />
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <>
+                            <button className='bg-gray-500 px-2.5 py-3 rounded-lg text-white' onClick={() => setModalOpen(true)}>
+                                Create Board
+                            </button>
+                            <BoardForm user={user} client={client} isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+                        </>
+                    )}
                 </div>
             </div>
         </div>

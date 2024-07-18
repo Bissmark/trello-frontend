@@ -18,7 +18,7 @@ const SignUpForm = ({ setUser, showSignup, setShowSignup }) => {
     const [error, setError] = useState('');
 
     const handleChange = (e) => {
-        setUserData({...userData,[e.target.name]: e.target.value, error: ''});
+        setUserData({ ...userData, [e.target.name]: e.target.value, error: '' });
     }
 
     const handleSubmit = async (e) => {

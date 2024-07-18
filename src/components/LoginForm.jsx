@@ -8,6 +8,7 @@ import * as authService from '../services/authService';
 
 export default function LoginForm({ setUser, showSignup, setShowSignup, setProfile }) {
     const [credentials, setCredentials] = useState({
+        name: '',
         email: '',
         password: ''
     });

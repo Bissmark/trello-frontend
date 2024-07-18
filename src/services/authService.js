@@ -14,6 +14,7 @@ const signup = async (formData) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formData),
         });
+        console.log(formData);
         const json = await res.json();
         
         if (json.error) {
