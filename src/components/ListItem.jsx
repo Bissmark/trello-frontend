@@ -4,6 +4,7 @@ import CardForm from './CardForm';
 import CardDetail from './CardDetail';
 import { useMutation } from '@tanstack/react-query';
 import DeleteModal from './DeleteModal';
+import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 
 const PriorityLevels = {
   High: "High",
@@ -44,6 +45,21 @@ const ListItem = ({ list, client }) => {
         setIsCardModalOpen(true); // Open the modal
     };
 
+    const onDragEnd = (result) => {
+        const { destination, source } = result;
+        if (!destination) return;
+        if (destination.droppableId === source.droppableId && destination.index === source.index) return;
+
+        const newCards = [...list.cards];
+        const [removedCard] = newCards.splice(source.index, 1);
+        newCards.splice(destination.index, 0, removedCard);
+
+        list = {
+            ...list,
+            cards: newCards.map((card, index) => ({ ...card, index }))
+        };
+    };
+
     const getPriorityColour = (priority) => {
     switch (priority) {
         case 'Low':
@@ -67,13 +83,30 @@ const ListItem = ({ list, client }) => {
                 </button>
                 <DeleteModal isOpen={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} onDelete={_handleDelete} />
             </div>
-            <div className='flex flex-row md:flex-col'>
-                {list.cards.map(card => (
-                    <div className='w-full bg-gray-600 rounded-lg p-2 mb-2' key={card._id}>
-                        <button style={{ backgroundColor: getPriorityColour(card.priority)}} onClick={() => handleCardClick(card)}>{card.title}</button>
+            <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId='list' direction='vertical'>
+                    {(provided) => (
+                    <div className='flex flex-row md:flex-col'
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                    >
+                        {list.cards.map(card => (
+                            <Draggable key={card._id} draggableId={card._id} index={card.index}>
+                                {(provided) => (
+                            <div className='w-full bg-gray-600 rounded-lg p-2 mb-2'
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                            >
+                                <button style={{ backgroundColor: getPriorityColour(card.priority)}} onClick={() => handleCardClick(card)}>{card.title}</button>
+                            </div>
+                            )}
+                            </Draggable>
+                        ))}
                     </div>
-                ))}
-            </div>
+                    )}
+            </Droppable>
+            </DragDropContext>
             <div>
                 <button onClick={() => setIsModalOpen(true)}>
                     <div className='flex flex-row items-center'>

@@ -70,7 +70,6 @@ const BoardDetails = ({ client }) => {
                 },
                 body: JSON.stringify({ lists: newLists })
             });
-            console.log(newLists);
             if (!response.ok) throw new Error('Network response was not ok');
             return response.json();
         }
@@ -78,20 +77,16 @@ const BoardDetails = ({ client }) => {
 
     const onDragEnd = (result) => {
         const { destination, source } = result;
-        //console.log(result);
-        if (!destination) {
-            return;
-        }
-        if (destination.droppableId === source.droppableId && destination.index === source.index) {
-            return;
-        }
 
-        const newResult = Array.from(board.lists);
-        const [removed] = newResult.splice(source.index, 1);
-        newResult.splice(destination.index, 0, removed);
+        if (!destination) return;
+        if (destination.droppableId === source.droppableId && destination.index === source.index) return;
 
-        board.lists = newResult;
-        saveArrayPositions.mutateAsync(newResult);
+        const newResult = Array.from(board.lists); // Create a new array from the existing lists
+        const [removed] = newResult.splice(source.index, 1); // Remove the item from the source index
+        newResult.splice(destination.index, 0, removed); // Insert the removed item into the destination index
+
+        board.lists = newResult; // Update the board object with the new list order
+        saveArrayPositions.mutateAsync(newResult); // Save the new list order to the database
     };
     
     const capitalizeFirstLetter = (string) => {
@@ -108,60 +103,62 @@ const BoardDetails = ({ client }) => {
             <div className='bg-blue-800 '>
                 <h1 className='p-3 font-bold text-3xl'>{capitalizeFirstLetter(board.name)}</h1>
             </div>
-            <DragDropContext onDragEnd={onDragEnd}>
-                <Droppable droppableId='board' direction="horizontal">
-                {(provided, snapshot) => (
-                    <div className='flex flex-col md:flex-row items-center md:items-start'
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                    >
-                        <div className='flex flex-col md:flex-row flex-start'>
-                            { board.lists.map((list, index) => (
-                                <Draggable key={list._id} draggableId={list._id} index={index}>
-                                    {(provided, snapshot) => (
-                                        <div
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
-                                        >
-                                            <ListItem list={list} onAddCard={addCardToList} client={client} />
-                                        </div>
-                                    )}
-                                </Draggable>
-                            ))}
-                            {provided.placeholder}
+            <div className='flex'>
+                <DragDropContext onDragEnd={onDragEnd}>
+                    <Droppable droppableId='board' direction='horizontal'>
+                    {(provided) => (
+                        <div className='flex flex-col md:flex-row items-center md:items-start'
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                        >
+                            <div className='flex flex-col md:flex-row flex-start'>
+                                { board.lists.map((list, index) => (
+                                    <Draggable key={list._id} draggableId={list._id} index={index}>
+                                        {(provided) => (
+                                            <div
+                                                ref={provided.innerRef}
+                                                {...provided.draggableProps}
+                                                {...provided.dragHandleProps}
+                                            >
+                                                <ListItem list={list} onAddCard={addCardToList} client={client} />
+                                            </div>
+                                        )}
+                                    </Draggable>
+                                ))}
+                                {provided.placeholder}
+                            </div>
                         </div>
-                    </div>
-                )}
-                </Droppable>
-            </DragDropContext>
-            <div className='m-4'>
-                {!addingList ? (
-                    <button 
-                        className='bg-gray-100 p-2 w-48 text-left text-black rounded-lg hover:bg-gray-200' 
-                        onClick={() => setAddingList(true)}
-                    >
-                        <div className='flex flex-row items-center'>
-                            <FaPlus className='mr-2' />
-                            Add List
-                        </div>
-                    </button>
-                ) : (
-                    <form className='flex flex-col bg-gray-800 p-2 rounded-xl' onSubmit={_handleSubmit}>
-                        <input 
-                            type="text"
-                            className='p-2 rounded-lg mb-2 border border-gray-300 text-gray-500 bg-gray-700 hover:bg-gray-600'
-                            placeholder='Enter list title...'
-                            autoFocus
-                            value={listName} 
-                            onChange={(e) => setListName(e.target.value)} 
-                        />
-                        <div className='flex'>
-                            <button className='bg-blue-500 rounded-lg p-2 mr-3' disabled={disable} type="submit">Add list</button>
-                            <button onClick={() => setAddingList(false)}>X</button>
-                        </div>
-                    </form>
-                )}
+                    )}
+                    </Droppable>
+                </DragDropContext>
+                <div className='m-4'>
+                    {!addingList ? (
+                        <button 
+                            className='bg-gray-100 p-2 w-48 text-left text-black rounded-lg hover:bg-gray-200' 
+                            onClick={() => setAddingList(true)}
+                        >
+                            <div className='flex flex-row items-center'>
+                                <FaPlus className='mr-2' />
+                                Add List
+                            </div>
+                        </button>
+                    ) : (
+                        <form className='flex flex-col bg-gray-800 p-2 rounded-xl' onSubmit={_handleSubmit}>
+                            <input 
+                                type="text"
+                                className='p-2 rounded-lg mb-2 border border-gray-300 text-gray-500 bg-gray-700 hover:bg-gray-600'
+                                placeholder='Enter list title...'
+                                autoFocus
+                                value={listName} 
+                                onChange={(e) => setListName(e.target.value)} 
+                            />
+                            <div className='flex'>
+                                <button className='bg-blue-500 rounded-lg p-2 mr-3' disabled={disable} type="submit">Add list</button>
+                                <button onClick={() => setAddingList(false)}>X</button>
+                            </div>
+                        </form>
+                    )}
+                </div>
             </div>
         </div>
     )
