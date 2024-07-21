@@ -70,6 +70,7 @@ const ListItem = ({ list, client }) => {
 
     const onDragEnd = (result) => {
         if (!result.destination) return;
+        if (result.destination.droppableId === result.source.droppableId && result.destination.index === result.source.index) return;
 
         const items = reorder(
             list.cards,
@@ -115,12 +116,15 @@ const ListItem = ({ list, client }) => {
                         {list.cards.map((card, index) => (
                             <Draggable key={card._id} draggableId={card._id} index={index}>
                                 {(provided) => (
-                                    <div className='w-full bg-gray-600 rounded-lg p-2 mb-2'
+                                    <div className='w-full bg-gray-600 rounded-lg p-2 mb-2 hover:border-emerald-50 border-transparent border-2'
                                         ref={provided.innerRef}
                                         {...provided.draggableProps}
                                         {...provided.dragHandleProps}
                                     >
-                                        <button style={{ backgroundColor: getPriorityColour(card.priority)}} onClick={() => handleCardClick(card)}>{card.title}</button>
+                                        <div>
+                                            <div className='w-16 rounded-md text-center text-sm mb-1' style={{ backgroundColor: getPriorityColour(card.priority)}}>{PriorityLevels[card.priority]}</div>
+                                            <button onClick={() => handleCardClick(card)}>{card.title}</button>
+                                        </div>
                                     </div>
                                 )}
                             </Draggable>
