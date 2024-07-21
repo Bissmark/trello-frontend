@@ -12,6 +12,14 @@ const PriorityLevels = {
   Low: "Low",
 };
 
+const reorder = (list, startIndex, endIndex) => {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+
+    return result;
+};
+
 const ListItem = ({ list, client }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isCardModalOpen, setIsCardModalOpen] = useState(false);
@@ -45,19 +53,33 @@ const ListItem = ({ list, client }) => {
         setIsCardModalOpen(true); // Open the modal
     };
 
+    const saveCardsPositions = useMutation({
+        mutationFn: async (cards) => {
+            const response = await fetch(`${import.meta.env.VITE_EXPRESS_BACKEND_URL}/lists/${list._id}`, {
+                method: 'PUT',
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ cards })
+            });
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+        }
+    })
+
     const onDragEnd = (result) => {
-        const { destination, source } = result;
-        if (!destination) return;
-        if (destination.droppableId === source.droppableId && destination.index === source.index) return;
+        if (!result.destination) return;
 
-        const newCards = [...list.cards];
-        const [removedCard] = newCards.splice(source.index, 1);
-        newCards.splice(destination.index, 0, removedCard);
+        const items = reorder(
+            list.cards,
+            result.source.index,
+            result.destination.index
+        );
 
-        list = {
-            ...list,
-            cards: newCards.map((card, index) => ({ ...card, index }))
-        };
+        list.cards = items;
+
+        saveCardsPositions.mutateAsync(list.cards);
     };
 
     const getPriorityColour = (priority) => {
@@ -87,22 +109,23 @@ const ListItem = ({ list, client }) => {
                 <Droppable droppableId='list' direction='vertical'>
                     {(provided) => (
                     <div className='flex flex-row md:flex-col'
-                        ref={provided.innerRef}
                         {...provided.droppableProps}
+                        ref={provided.innerRef}
                     >
-                        {list.cards.map(card => (
-                            <Draggable key={card._id} draggableId={card._id} index={card.index}>
+                        {list.cards.map((card, index) => (
+                            <Draggable key={card._id} draggableId={card._id} index={index}>
                                 {(provided) => (
-                            <div className='w-full bg-gray-600 rounded-lg p-2 mb-2'
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                            >
-                                <button style={{ backgroundColor: getPriorityColour(card.priority)}} onClick={() => handleCardClick(card)}>{card.title}</button>
-                            </div>
-                            )}
+                                    <div className='w-full bg-gray-600 rounded-lg p-2 mb-2'
+                                        ref={provided.innerRef}
+                                        {...provided.draggableProps}
+                                        {...provided.dragHandleProps}
+                                    >
+                                        <button style={{ backgroundColor: getPriorityColour(card.priority)}} onClick={() => handleCardClick(card)}>{card.title}</button>
+                                    </div>
+                                )}
                             </Draggable>
                         ))}
+                        {provided.placeholder}
                     </div>
                     )}
             </Droppable>

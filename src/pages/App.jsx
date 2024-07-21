@@ -17,8 +17,9 @@ const App = () => {
 
     const logOut = () => {
         googleLogout();
-        localStorage.removeItem('user');
-        setProfile([]);
+        authService.signout();
+        //localStorage.removeItem('user');
+        //setProfile([]);
         setUser(null);
     };
 

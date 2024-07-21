@@ -49,7 +49,6 @@ const Profile = ({user, client}) => {
     }
 
     const _handleDelete = async (boardId) => {
-        console.log(boardId);
         await deleteBoard.mutateAsync(boardId);
         closeDeleteModal();
     }
