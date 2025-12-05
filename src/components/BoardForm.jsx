@@ -7,6 +7,8 @@ const BoardForm = ({ client, isOpen, onClose, user }) => {
     const [board, setBoard] = useState('');
     const BACKEND_URL = getBackendURL();
 
+    console.log(BACKEND_URL);
+
      const addBoardMutation = useMutation({
         mutationFn: async (newBoard) => {
             const payload = {
