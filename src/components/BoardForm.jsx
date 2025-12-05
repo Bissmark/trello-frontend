@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { MdDriveFileRenameOutline } from "react-icons/md";
 import { useMutation } from '@tanstack/react-query';
+import { getBackendURL } from '../services/config';
 
 const BoardForm = ({ client, isOpen, onClose, user }) => {
     const [board, setBoard] = useState('');
+    const BACKEND_URL = getBackendURL();
 
      const addBoardMutation = useMutation({
         mutationFn: async (newBoard) => {
@@ -12,7 +14,7 @@ const BoardForm = ({ client, isOpen, onClose, user }) => {
                 user: user._id,
             }
 
-            const response = await fetch(`${import.meta.env.VITE_EXPRESS_BACKEND_URL}/boards`, {
+            const response = await fetch(`${BACKEND_URL}/boards`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
