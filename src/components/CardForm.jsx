@@ -8,7 +8,7 @@ const CardForm = ({ list, isOpen, onClose, client, priorityLevels}) => {
     const [card, setCard] = useState({
         title: '',
         description: '',
-        priority: priorityLevels.High,
+        priority: priorityLevels.Default,
     });
 
     const _handleImageChange = (e) => {

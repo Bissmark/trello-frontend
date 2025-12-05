@@ -64,6 +64,7 @@ const Home = ({ client, user }) => {
     return (
         <div>
             <h1>Home</h1>
+            <button>Create Board</button>
             {/* <div className='flex flex-row flex-start'>
                 {lists?.map((list, index) => (
                     <div key={index}>

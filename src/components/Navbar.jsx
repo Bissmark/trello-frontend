@@ -42,7 +42,7 @@ const Navbar = ({ client, user,  profile, logOut }) => {
                     <ul className='flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:border-0 text-white'>
                         { user ? (
                             <div className='md:flex md:flex-row md:items-center'>
-                                <li className='mr-5 hover:underline hover:text-cyan-300'><Link to="/">Home</Link></li>
+                                <li className='mr-5 hover:underline hover:text-cyan-300'><Link to="/profile">Home</Link></li>
                                 <li className='mr-5 hover:underline hover:text-cyan-300'><Link to="/about">About</Link></li>
                                 <div className='relative' ref={dropdownRef}>
                                     <CgProfile className='text-blue-500 hover:text-white cursor-pointer' size={30} onClick={_handleProfileDropdown} />

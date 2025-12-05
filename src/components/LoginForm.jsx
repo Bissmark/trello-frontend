@@ -5,6 +5,7 @@ import { AiOutlineMail } from 'react-icons/ai';
 import { RiLockPasswordLine } from 'react-icons/ri';
 import { useGoogleLogin } from '@react-oauth/google';
 import * as authService from '../services/authService';
+import { getBackendURL } from '../services/config';
 
 export default function LoginForm({ setUser, showSignup, setShowSignup, setProfile }) {
     const [credentials, setCredentials] = useState({
@@ -14,6 +15,7 @@ export default function LoginForm({ setUser, showSignup, setShowSignup, setProfi
     });
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const BACKEND_URL = getBackendURL();
 
     const handleChange = (e) => {
         setCredentials({ ...credentials, [e.target.name]: e.target.value, error: '' });
@@ -40,18 +42,63 @@ export default function LoginForm({ setUser, showSignup, setShowSignup, setProfi
 
     const handleLoginSuccess = async (response) => {
         const { access_token } = response;
+        
         try {
+            console.log('Google login successful, getting user info...'); // Debug log
+            
+            // Get user info from Google
             const userInfo = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${access_token}`, {
                 headers: {
                     Authorization: `Bearer ${access_token}`,
                     Accept: 'application/json',
                 }
             }).then(res => res.json());
-            setUser(userInfo);
-            setProfile(userInfo);
-            localStorage.setItem('user', JSON.stringify(userInfo));
+
+            console.log('Google user info received:', userInfo); // Debug log
+
+            // Send user info to your backend
+            const backendResponse = await fetch(`${BACKEND_URL}/users/google-auth`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: userInfo.email,
+                    name: userInfo.name,
+                    picture: userInfo.picture,
+                    sub: userInfo.id // Google's user ID
+                })
+            });
+
+            console.log('Backend response status:', backendResponse.status); // Debug log
+
+            if (!backendResponse.ok) {
+                throw new Error(`Backend error: ${backendResponse.status}`);
+            }
+
+            const backendData = await backendResponse.json();
+            console.log('Backend data received:', backendData); // Debug log
+
+            if (backendData.error) {
+                throw new Error(backendData.error);
+            }
+
+            // Store the JWT token from your backend
+            if (backendData.token) {
+                localStorage.setItem('token', backendData.token);
+                console.log('JWT token stored successfully'); // Debug log
+            }
+
+            // Set user data (this should now include _id from your backend)
+            setUser(backendData);
+            setProfile(backendData);
+
+            console.log('User logged in successfully:', backendData.email); // Debug log
+            navigate('/profile');
+
         } catch (error) {
-            console.log('Login Failed, Try Again', error);
+            console.error('Google login error:', error);
+            setError(`Login failed: ${error.message}`);
         }
     }
 

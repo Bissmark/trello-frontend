@@ -7,9 +7,10 @@ import DeleteModal from './DeleteModal';
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 
 const PriorityLevels = {
-  High: "High",
-  Medium: "Medium",
-  Low: "Low",
+    None: "",
+    High: "High",
+    Medium: "Medium",
+    Low: "Low",
 };
 
 const reorder = (list, startIndex, endIndex) => {
@@ -109,7 +110,7 @@ const ListItem = ({ list, client }) => {
             <DragDropContext onDragEnd={onDragEnd}>
                 <Droppable droppableId='list' direction='vertical'>
                     {(provided) => (
-                    <div className='flex flex-row md:flex-col'
+                    <div className='flex flex-col'
                         {...provided.droppableProps}
                         ref={provided.innerRef}
                     >
@@ -121,9 +122,9 @@ const ListItem = ({ list, client }) => {
                                         {...provided.draggableProps}
                                         {...provided.dragHandleProps}
                                     >
-                                        <div>
+                                        <div onClick={() => handleCardClick(card)}>
                                             <div className='w-16 rounded-md text-center text-sm mb-1' style={{ backgroundColor: getPriorityColour(card.priority)}}>{PriorityLevels[card.priority]}</div>
-                                            <button onClick={() => handleCardClick(card)}>{card.title}</button>
+                                            <button>{card.title}</button>
                                         </div>
                                     </div>
                                 )}

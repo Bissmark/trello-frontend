@@ -1,4 +1,11 @@
-const BACKEND_URL = import.meta.env.VITE_EXPRESS_BACKEND_URL; // this is our Express API url
+const getBackendURL = () => {
+    if (import.meta.env.PROD) {
+        return import.meta.env.VITE_EXPRESS_BACKEND_URL_PROD;
+    }
+    return import.meta.env.VITE_EXPRESS_BACKEND_URL_DEV;
+};
+
+const BACKEND_URL = getBackendURL();
 
 const getUser = () => {
     const token = localStorage.getItem('token');

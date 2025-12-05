@@ -3,15 +3,18 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import DeleteModal from "../components/DeleteModal";
 import BoardForm from '../components/BoardForm';
+import { getBackendURL } from '../services/config';
 
 const Profile = ({user, client}) => {
     const [deleteModalOpen, setDeleteModalOpen] = useState({ isOpen: false, boardId: null });
     const [modalOpen, setModalOpen] = useState(false);
 
+    const BACKEND_URL = getBackendURL();
+
     const { isFetching, error, data: boards } = useQuery({
         queryKey: ['boards', user._id],
         queryFn: async () => {
-            const response = await fetch(`${import.meta.env.VITE_EXPRESS_BACKEND_URL}/boards`, {
+            const response = await fetch(`${BACKEND_URL}/boards`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 }
@@ -24,7 +27,7 @@ const Profile = ({user, client}) => {
     const deleteBoard = useMutation({
         mutationFn: async (boardId) => {
             console.log(boardId);
-            const response = await fetch(`${import.meta.env.VITE_EXPRESS_BACKEND_URL}/boards/${boardId}`, {
+            const response = await fetch(`${BACKEND_URL}/boards/${boardId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

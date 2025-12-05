@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { FaPlus } from "react-icons/fa";
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import ListItem from '../components/ListItem';
+import { getBackendURL } from '../services/config';
 
 const BoardDetails = ({ client }) => {
     const [addingList, setAddingList] = useState(false);
@@ -11,11 +12,12 @@ const BoardDetails = ({ client }) => {
     const [cards, setCards] = useState([]);
 
     const { id } = useParams();
+    const BACKEND_URL = getBackendURL();
 
     const { isFetching, error, data: board } = useQuery({
         queryKey: ['board', id],
         queryFn: async () => {
-            const response = await fetch(`${import.meta.env.VITE_EXPRESS_BACKEND_URL}/boards/${id}`, {
+            const response = await fetch(`${BACKEND_URL}/boards/${id}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 }
@@ -32,7 +34,7 @@ const BoardDetails = ({ client }) => {
                 board: id,
             }
 
-            const response = await fetch(`${import.meta.env.VITE_EXPRESS_BACKEND_URL}/lists`, {
+            const response = await fetch(`${BACKEND_URL}/lists`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -62,7 +64,7 @@ const BoardDetails = ({ client }) => {
 
     const saveArrayPositions = useMutation({
         mutationFn: async (newLists) => {
-            const response = await fetch(`${import.meta.env.VITE_EXPRESS_BACKEND_URL}/boards/${id}`, {
+            const response = await fetch(`${BACKEND_URL}/boards/${id}`, {
                 method: 'PUT',
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
