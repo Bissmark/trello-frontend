@@ -5,6 +5,7 @@ import CardDetail from './CardDetail';
 import { useMutation } from '@tanstack/react-query';
 import DeleteModal from './DeleteModal';
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
+import { getBackendURL } from '../services/config';
 
 const PriorityLevels = {
     None: "",
@@ -12,6 +13,7 @@ const PriorityLevels = {
     Medium: "Medium",
     Low: "Low",
 };
+const BACKEND_URL = getBackendURL();
 
 const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
@@ -29,7 +31,7 @@ const ListItem = ({ list, client }) => {
 
     const deleteList = useMutation({
         mutationFn: async () => {
-            const response = await fetch(`${import.meta.env.VITE_EXPRESS_BACKEND_URL}/lists/${list._id}`, {
+            const response = await fetch(`${BACKEND_URL}/lists/${list._id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -56,7 +58,7 @@ const ListItem = ({ list, client }) => {
 
     const saveCardsPositions = useMutation({
         mutationFn: async (cards) => {
-            const response = await fetch(`${import.meta.env.VITE_EXPRESS_BACKEND_URL}/lists/${list._id}`, {
+            const response = await fetch(`${BACKEND_URL}/lists/${list._id}`, {
                 method: 'PUT',
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,

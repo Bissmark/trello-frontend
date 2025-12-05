@@ -2,6 +2,7 @@ import { useState } from "react";
 import { MdDriveFileRenameOutline, MdOutlineDescription, MdPriorityHigh } from "react-icons/md";
 import { GoImage } from "react-icons/go";
 import { useQuery, useMutation } from '@tanstack/react-query';
+import { getBackendURL } from '../services/config';
 
 const CardForm = ({ list, isOpen, onClose, client, priorityLevels}) => {
     const [image, setImage] = useState('');
@@ -10,6 +11,7 @@ const CardForm = ({ list, isOpen, onClose, client, priorityLevels}) => {
         description: '',
         priority: priorityLevels.Default,
     });
+    const BACKEND_URL = getBackendURL();
 
     const _handleImageChange = (e) => {
         setImage(e.target.files[0]);
@@ -17,7 +19,7 @@ const CardForm = ({ list, isOpen, onClose, client, priorityLevels}) => {
 
     const mutation = useMutation({
         mutationFn: async (formData) => {
-            const response = await fetch(`${import.meta.env.VITE_EXPRESS_BACKEND_URL}/cards`, {
+            const response = await fetch(`${BACKEND_URL}/cards`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

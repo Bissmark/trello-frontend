@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query"
 import { MdDriveFileRenameOutline, MdOutlineDescription, MdPriorityHigh } from "react-icons/md";
+import { getBackendURL } from '../services/config';
 
 const CardDetail = ({ card, onClose, isOpen, priorityLevels, client }) => {
     const [isEditing, setIsEditing] = useState(false);
@@ -9,6 +10,8 @@ const CardDetail = ({ card, onClose, isOpen, priorityLevels, client }) => {
         description: '',
         priority: '',
     });
+
+    const BACKEND_URL = getBackendURL();
 
     useEffect(() => {
         if (card) {
@@ -29,7 +32,7 @@ const CardDetail = ({ card, onClose, isOpen, priorityLevels, client }) => {
 
     const editMyCard = useMutation({
         mutationFn: async () => {
-            const response = await fetch(`${import.meta.env.VITE_EXPRESS_BACKEND_URL}/cards/${card._id}`, {
+            const response = await fetch(`${BACKEND_URL}/cards/${card._id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
